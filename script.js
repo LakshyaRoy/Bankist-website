@@ -85,3 +85,21 @@ btnScrollTo.addEventListener('click', function () {
     behavior: 'smooth',
   });
 });
+// const randomInt = (max, min) =>
+//   Math.floor(Math.random() * (max - min + 1) + min);
+
+// const randomColor = () =>
+//   `rgb(${randomInt(255, 0)},${randomInt(255, 0)},${randomInt(255, 0)})`;
+
+// // console.log(randomColor());
+
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+// });
+
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+// });
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+// });
