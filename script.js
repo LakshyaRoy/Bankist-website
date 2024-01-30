@@ -106,6 +106,96 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
+// sticky nav
+
+// option1
+// but less performance
+
+// const coordinates = section1.getBoundingClientRect();
+// console.log(coordinates);
+// window.addEventListener('scroll', function () {
+//   console.log(window.scrollY);
+//   if (window.scrollY >= coordinates.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+// sticky nav
+// option 2
+// high performance
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect();
+
+// step 3 make a callback function and pass in the new observer.
+const headerCallback = entries => {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+
+// step1 create a new observer.
+const headerObserver = new IntersectionObserver(headerCallback, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight.height}px`,
+});
+// step2  assign the observer with the dom element.
+headerObserver.observe(header);
+
+// slide up animations to the sections
+
+const allSection = document.querySelectorAll('.section');
+
+const sectionCallback = (entries, observer) => {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(sectionCallback, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSection.forEach(section => {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+// image blur effect
+
+const allImages = document.querySelectorAll('img[data-src]');
+// console.log(allImages);
+
+const imageCallback = (entries, observe) => {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observe.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(imageCallback, {
+  root: null,
+  threshold: 0,
+  rootMargin: '100px',
+});
+
+allImages.forEach(img => imgObserver.observe(img));
+
 /////////////////////////////////////////////
 ////////////////////////////////////////////
 ///////////////////////////////////////////
