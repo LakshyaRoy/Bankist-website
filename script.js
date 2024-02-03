@@ -60,7 +60,7 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
   if (e.target.classList.contains('nav__link')) {
     const id = e.target.getAttribute('href');
-    document.querySelector(`${id}`).scrollIntoView({
+    document.querySelector(id).scrollIntoView({
       behavior: 'smooth',
     });
   }
@@ -173,6 +173,8 @@ allSection.forEach(section => {
 
 // image blur effect
 
+// image otimization with lazy loading
+
 const allImages = document.querySelectorAll('img[data-src]');
 // console.log(allImages);
 
@@ -195,6 +197,95 @@ const imgObserver = new IntersectionObserver(imageCallback, {
 });
 
 allImages.forEach(img => imgObserver.observe(img));
+
+// slider
+const sliderFunction = function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    const slides = document.querySelectorAll('.slide');
+    const btnLeft = document.querySelector('.slider__btn--left');
+    const btnRight = document.querySelector('.slider__btn--right');
+    const dotsContainer = document.querySelector('.dots');
+    let curr = 0;
+    const maxSlide = slides.length;
+
+    slides.forEach((s, i) => {
+      return (s.style.transform = `translateX(${100 * i}%)`);
+    });
+
+    const createDots = function () {
+      slides.forEach(function (_, i) {
+        dotsContainer.insertAdjacentHTML(
+          'beforeend',
+          `<button class="dots__dot" data-slide="${i}"></button>`
+        );
+      });
+    };
+
+    const currDots = function (slide) {
+      document
+        .querySelectorAll('.dots__dot')
+        .forEach(dots => dots.classList.remove('dots__dot--active'));
+
+      document
+        .querySelector(`.dots__dot[data-slide="${slide}"]`)
+        .classList.add('dots__dot--active');
+    };
+
+    dotsContainer.addEventListener('click', function (e) {
+      if (e.target.classList.contains('dots__dot')) {
+        const { slide } = e.target.dataset;
+        updateSlidePosition(slide);
+        currDots(slide);
+      }
+    });
+
+    function updateSlidePosition(currSlide) {
+      slides.forEach(
+        (s, i) => (s.style.transform = `translateX(${100 * (i - currSlide)}%)`)
+      );
+    }
+
+    function nextSlide() {
+      if (curr === maxSlide - 1) {
+        curr = 0;
+      } else {
+        curr++;
+      }
+      updateSlidePosition(curr);
+      currDots(curr);
+    }
+
+    function previousSlide() {
+      if (curr === 0) {
+        curr = maxSlide - 1;
+      } else {
+        curr--;
+      }
+      updateSlidePosition(curr);
+      currDots(curr);
+    }
+    // init function
+    const init = function () {
+      createDots();
+      currDots(0);
+    };
+    init();
+
+    // event handelers
+
+    btnRight.addEventListener('click', nextSlide);
+    btnLeft.addEventListener('click', previousSlide);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.code === 'ArrowRight') {
+        nextSlide();
+      } else if (e.code === 'ArrowLeft') {
+        previousSlide();
+      }
+    });
+  });
+};
+sliderFunction();
 
 /////////////////////////////////////////////
 ////////////////////////////////////////////

@@ -145,7 +145,8 @@ img {
 }
 
 .nav__link:link,
-.nav__link:visited {
+.nav__link:visited,
+.nav__link_btn {
   font-size: 1.7rem;
   font-weight: 400;
   color: inherit;
@@ -458,7 +459,7 @@ h4 {
 
 .dots__dot--active {
   /* background-color: #fff; */
-  background-color: #888;
+  background-color: #999;
   opacity: 1;
 }
 
